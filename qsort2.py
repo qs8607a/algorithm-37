@@ -7,14 +7,28 @@ def qsort(l, h):
 	if l >= h:
 		return
 
-	j = l - 1
-	#print 111, l, h, t, j, data
-	for i in xrange(l, h):
-		if data[i] <= t:
-			j += 1
-			tmp = data[j]
-			data[j] = data[i]
-			data[i] = tmp
+	t = data[h]
+	i = l
+	j = h - 1
+
+
+	while (True):
+		while i <= h:
+			if data[i] > t:
+				break
+			i += 1
+
+		while j >= l:
+			if data[j] < t:
+				break
+			j -= 1
+
+		if i > j:
+			break
+
+		tmp = data[j]
+		data[j] = data[i]
+		data[i] = tmp
 
 	j += 1
 	data[h] = data[j]
