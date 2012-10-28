@@ -1,8 +1,5 @@
-import random
-data = list()
-for i in xrange(10000):
-	data.append(random.randint(1,100))
-
+import common
+data = common.gen_rand_list(10000, 1, 100)
 def qsort(l, h):
 	if l >= h:
 		return
