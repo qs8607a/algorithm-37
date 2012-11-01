@@ -1,6 +1,9 @@
 class BinaryTree():
 	def __init__(self):
 		self._root = None
+		self._level = 0
+		self._deep_lvl = 0
+		self._deep_parent = 0
 
 	def Search(self, node):
 		return self._Search(self._root, node)
@@ -86,19 +89,44 @@ class BinaryTree():
 		pass
 
 	def InorderWalk(self):
-		self.Walk(self._root)
+		self.RecursiveWalk(self._root)
 
-	def Walk(self, p):
+	def Walk(self):
+		stack = list()
+		#stack.insert(0, self._root)
+
+		top = self._root
+		while top is not None or len(stack) > 0:
+			if top is not None:
+				stack.insert(0, top)
+				top = top.l
+				continue
+
+			top = stack.pop(0)
+			print "111", top
+
+			top = top.r
+
+	def RecursiveWalk(self, p):
 		if p is not None:
-			self.Walk(p.l)
+			self._level += 1
+			self.RecursiveWalk(p.l)
 			l = None
 			r = None
 			if p.l is not None:
 				l = p.l.v
 			if p.r is not None:
 				r = p.r.v
-			print p.v, l, r
-			self.Walk(p.r)
+			if p.l is not None and \
+				p.r is not None and \
+				self._level > self._deep_lvl:
+				self._deep_lvl = self._level
+				self._deep_parent = p
+
+			print self._level, p.v, l, r
+
+			self.RecursiveWalk(p.r)
+			self._level -= 1
 
 class Node():
 	def __init__(self, v):
@@ -106,6 +134,8 @@ class Node():
 		self.l = None
 		self.r = None
 		self.p = None
+	def __str__(self):
+		return "%s" % self.v
 
 import random
 t = BinaryTree()
@@ -120,10 +150,19 @@ for i in xrange(10):
 	t.Insert(Node(num))
 
 t.InorderWalk()
+t.Walk()
+print t._deep_lvl, t._deep_parent.v
+
 assert(t.Search(Node(num)) is not None)
 assert(t.Search(Node(-1)) is None)
 assert(t.Minimum().v == min_)
 assert(t.Maximum().v == max_)
+b = BinaryTree()
+b.Insert(Node(2))
+b.Insert(Node(1))
+b.Insert(Node(3))
+b.InorderWalk()
+b.Walk()
 
 print num, t.Successor(Node(num)).v
 print num, t.Predecessor(Node(num)).v
